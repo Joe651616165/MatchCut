@@ -1,12 +1,12 @@
-name: Build MatchCut
+name: "Publish"
 
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
-  build-tauri:
+  publish-tauri:
     permissions:
       contents: write
     strategy:
@@ -17,7 +17,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
@@ -26,16 +26,22 @@ jobs:
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
 
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+
       - name: install frontend dependencies
         run: npm install
 
       - name: Run Tauri build
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v0.5.8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: __VERSION__
-          releaseName: 'MatchCut v__VERSION__'
-          releaseBody: 'See the assets to download this version and deploy.'
-          releaseDraft: true
+          tagName: v__VERSION__
+          releaseName: "MatchCut v__VERSION__"
+          releaseBody: "Automated desktop app release for macOS and Windows."
+          releaseDraft: false
           prerelease: false
