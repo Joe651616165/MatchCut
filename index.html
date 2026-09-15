@@ -1,157 +1,139 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2762.3">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000; min-height: 14.0px}
-    span.s1 {font-kerning: none}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatchCut / 速对齐 - 零渲染、秒级多机位音频同步神器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="zh-CN"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;MatchCut / 速对齐 - 零渲染、秒级多机位音频同步神器&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col items-center justify-between selection:bg-indigo-500 selection:text-white"&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 顶部导航 --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;header class="w-full max-w-5xl px-6 py-6 flex items-center justify-between"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /&gt;&lt;/svg&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;span class="text-lg font-black tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400"&gt;MatchCut 速对齐&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 语言切换与 GitHub 链接 --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;select id="langSwitch" onchange="changeLanguage(this.value)" class="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-indigo-500 cursor-pointer"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;option value="zh" selected&gt;🇨🇳 中文&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;option value="en"&gt;🇬🇧 English&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;option value="es"&gt;🇪🇸 Español&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;option value="de"&gt;🇩🇪 Deutsch&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/select&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="https://github.com/Joe651616165/MatchCut" target="_blank" class="text-sm font-semibold text-slate-400 hover:text-white transition-colors" data-i18n="github"&gt;GitHub 开源&lt;/a&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 核心 Hero 区域 --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;main class="w-full max-w-4xl px-6 py-12 flex flex-col items-center text-center my-auto"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-bold mb-8 shadow-inner"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;span data-i18n="badge"&gt;✨ 全新多机位智能拍摄时间排序已上线&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6 leading-tight"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;span data-i18n="title1"&gt;零渲染、秒级多机位&lt;/span&gt;&lt;br&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400" data-i18n="title2"&gt;音频同步神器&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/h1&gt;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;p class="text-base md:text-lg text-slate-400 max-w-2xl mb-10 leading-relaxed" data-i18n="desc"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>告别传统剪辑软件繁琐的对齐与卡顿。直接拖入素材，一键直出剪映草稿及达芬奇 FCPXML，让你的后期效率实现指数级跃升。</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/p&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;!-- 双下载按钮（兼顾国内外） --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="flex flex-col sm:flex-row gap-4 w-full justify-center"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- 国内高速通道 --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="https://pan.quark.cn/s/de11501d65ac" target="_blank" class="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-lg shadow-[0_0_40px_rgba(99,102,241,0.5)] transition-all hover:scale-105 flex items-center justify-center gap-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /&gt;&lt;/svg&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;span data-i18n="btnChina"&gt;国内网盘下载 (推荐大陆用户)&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- 海外/GitHub 通道 --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;a href="https://github.com/Joe651616165/MatchCut/releases" target="_blank" class="px-8 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 font-semibold text-lg transition-all flex items-center justify-center gap-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;span data-i18n="btnGlobal"&gt;GitHub Releases (Global)&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;p class="text-xs text-slate-500 mt-4" data-i18n="support"&gt;支持 macOS (Apple Silicon / Intel) &amp; Windows&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 底部版权 --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;footer class="w-full max-w-5xl px-6 py-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;p data-i18n="footer1"&gt;© 2026 MatchCut. Open source under MIT License.&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;p class="mt-2 sm:mt-0" data-i18n="footer2"&gt;本地沙盒运行，绝不上传您的隐私素材。&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;!-- 多语言切换核心 JS 脚本 --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const translations = {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>zh: {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>github: "GitHub 开源",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>badge: "✨ 全新多机位智能拍摄时间排序已上线",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title1: "零渲染、秒级多机位",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title2: "音频同步神器",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>desc: "告别传统剪辑软件繁琐的对齐与卡顿。直接拖入素材，一键直出剪映草稿及达芬奇 FCPXML，让你的后期效率实现指数级跃升。",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnChina: "国内网盘下载 (推荐大陆用户)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnGlobal: "GitHub Releases (海外/全球)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>support: "支持 macOS (Apple Silicon / Intel) &amp; Windows",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer1: "© 2026 MatchCut. Open source under MIT License.",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer2: "本地沙盒运行，绝不上传您的隐私素材。"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>},</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>en: {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>github: "GitHub Source",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>badge: "✨ New multi-camera smart timestamp sorting is live",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title1: "Zero-Render, Lightning-Fast",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title2: "Multi-Camera Audio Sync",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>desc: "Say goodbye to tedious alignment and lagging in traditional editors. Drop your footage and export Jianying drafts or DaVinci FCPXML instantly.",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnChina: "China Cloud Drive (For Mainland Users)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnGlobal: "GitHub Releases (Global)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>support: "Supports macOS (Apple Silicon / Intel) &amp; Windows",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer1: "© 2026 MatchCut. Open source under MIT License.",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer2: "Runs locally in a sandbox. Your privacy is 100% protected."</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>},</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>es: {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>github: "GitHub Open Source",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>badge: "✨ Nueva ordenación inteligente multicámara disponible",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title1: "Sincronización de audio multicámara",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title2: "sin renderizado y ultrarrápida",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>desc: "Dile adiós a las alineaciones tediosas. Arrastra tus archivos y exporta borradores de CapCut o DaVinci FCPXML al instante.",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnChina: "Descarga Cloud (Para China Continental)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnGlobal: "GitHub Releases (Global)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>support: "Compatible con macOS (Apple Silicon / Intel) y Windows",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer1: "© 2026 MatchCut. Licencia MIT.",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer2: "Ejecución local en sandbox. Sus datos de privacidad están seguros."</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>},</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>de: {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>github: "GitHub Open Source",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>badge: "✨ Neues intelligente Multi-Kamera-Sortierung ist da",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title1: "Null-Render, Blitzschnelle",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>title2: "Multi-Kamera Audio-Synchronisation",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>desc: "Verabschieden Sie sich von mühsamem Ausrichten. Material per Drag &amp; Drop einfügen und sofort CapCut-Entwürfe oder DaVinci FCPXML exportieren.",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnChina: "China Cloud-Download (Für Festland-China)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>btnGlobal: "GitHub Releases (Global)",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>support: "Unterstützt macOS (Apple Silicon / Intel) &amp; Windows",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer1: "© 2026 MatchCut. Unter MIT-Lizenz open source.",</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>footer2: "Lokale Sandbox-Ausführung. Ihre Privatsphäre ist geschützt."</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function changeLanguage(lang) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const elements = document.querySelectorAll('[data-i18n]');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>elements.forEach(el =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const key = el.getAttribute('data-i18n');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (translations[lang] &amp;&amp; translations[lang][key]) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>el.textContent = translations[lang][key];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>localStorage.setItem('matchcut_lang', lang);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 页面加载时自动读取用户偏好或浏览器语言</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>window.addEventListener('DOMContentLoaded', () =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const savedLang = localStorage.getItem('matchcut_lang') || 'zh';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('langSwitch').value = savedLang;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>changeLanguage(savedLang);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col items-center justify-between selection:bg-indigo-500 selection:text-white">
+    
+    <!-- 顶部导航 -->
+    <header class="w-full max-w-5xl px-6 py-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <span class="text-lg font-black tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">MatchCut 速对齐</span>
+        </div>
+        
+        <!-- 语言切换与 GitHub 链接 -->
+        <div class="flex items-center gap-4">
+            <select id="langSwitch" onchange="changeLanguage(this.value)" class="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-indigo-500 cursor-pointer">
+                <option value="zh" selected>🇨🇳 中文</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="de">🇩🇪 Deutsch</option>
+            </select>
+            <a href="https://github.com/Joe651616165/MatchCut" target="_blank" class="text-sm font-semibold text-slate-400 hover:text-white transition-colors" data-i18n="github">GitHub 开源</a>
+        </div>
+    </header>
+
+    <!-- 核心 Hero 区域 -->
+    <main class="w-full max-w-4xl px-6 py-12 flex flex-col items-center text-center my-auto">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-bold mb-8 shadow-inner">
+            <span data-i18n="badge">✨ 全新多机位智能拍摄时间排序已上线</span>
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6 leading-tight">
+            <span data-i18n="title1">零渲染、秒级多机位</span><br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400" data-i18n="title2">音频同步神器</span>
+        </h1>
+        
+        <p class="text-base md:text-lg text-slate-400 max-w-2xl mb-10 leading-relaxed" data-i18n="desc">
+            告别传统剪辑软件繁琐的对齐与卡顿。直接拖入素材，一键直出剪映草稿及达芬奇 FCPXML，让你的后期效率实现指数级跃升。
+        </p>
+
+        <!-- 双下载按钮（兼顾国内外） -->
+        <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+            <!-- 国内高速通道 -->
+            <a href="https://pan.quark.cn/s/de11501d65ac" target="_blank" class="group relative px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-lg shadow-[0_0_40px_rgba(99,102,241,0.5)] transition-all hover:scale-105 flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                <span data-i18n="btnChina">国内网盘下载 (推荐大陆用户)</span>
+            </a>
+            <!-- 海外/GitHub 通道 -->
+            <a href="https://github.com/Joe651616165/MatchCut/releases" target="_blank" class="px-8 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 font-semibold text-lg transition-all flex items-center justify-center gap-2">
+                <span data-i18n="btnGlobal">GitHub Releases (Global)</span>
+            </a>
+        </div>
+        <p class="text-xs text-slate-500 mt-4" data-i18n="support">支持 macOS (Apple Silicon / Intel) & Windows</p>
+    </main>
+
+    <!-- 底部版权 -->
+    <footer class="w-full max-w-5xl px-6 py-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+        <p data-i18n="footer1">© 2026 MatchCut. Open source under MIT License.</p>
+        <p class="mt-2 sm:mt-0" data-i18n="footer2">本地沙盒运行，绝不上传您的隐私素材。</p>
+    </footer>
+
+    <!-- 多语言切换核心 JS 脚本 -->
+    <script>
+        const translations = {
+            zh: {
+                github: "GitHub 开源",
+                badge: "✨ 全新多机位智能拍摄时间排序已上线",
+                title1: "零渲染、秒级多机位",
+                title2: "音频同步神器",
+                desc: "告别传统剪辑软件繁琐的对齐与卡顿。直接拖入素材，一键直出剪映草稿及达芬奇 FCPXML，让你的后期效率实现指数级跃升。",
+                btnChina: "国内网盘下载 (推荐大陆用户)",
+                btnGlobal: "GitHub Releases (海外/全球)",
+                support: "支持 macOS (Apple Silicon / Intel) & Windows",
+                footer1: "© 2026 MatchCut. Open source under MIT License.",
+                footer2: "本地沙盒运行，绝不上传您的隐私素材。"
+            },
+            en: {
+                github: "GitHub Source",
+                badge: "✨ New multi-camera smart timestamp sorting is live",
+                title1: "Zero-Render, Lightning-Fast",
+                title2: "Multi-Camera Audio Sync",
+                desc: "Say goodbye to tedious alignment and lagging in traditional editors. Drop your footage and export Jianying drafts or DaVinci FCPXML instantly.",
+                btnChina: "China Cloud Drive (For Mainland Users)",
+                btnGlobal: "GitHub Releases (Global)",
+                support: "Supports macOS (Apple Silicon / Intel) & Windows",
+                footer1: "© 2026 MatchCut. Open source under MIT License.",
+                footer2: "Runs locally in a sandbox. Your privacy is 100% protected."
+            },
+            es: {
+                github: "GitHub Open Source",
+                badge: "✨ Nueva ordenación inteligente multicámara disponible",
+                title1: "Sincronización de audio multicámara",
+                title2: "sin renderizado y ultrarrápida",
+                desc: "Dile adiós a las alineaciones tediosas. Arrastra tus archivos y exporta borradores de CapCut o DaVinci FCPXML al instante.",
+                btnChina: "Descarga Cloud (Para China Continental)",
+                btnGlobal: "GitHub Releases (Global)",
+                support: "Compatible con macOS (Apple Silicon / Intel) y Windows",
+                footer1: "© 2026 MatchCut. Licencia MIT.",
+                footer2: "Ejecución local en sandbox. Sus datos de privacidad están seguros."
+            },
+            de: {
+                github: "GitHub Open Source",
+                badge: "✨ Neues intelligente Multi-Kamera-Sortierung ist da",
+                title1: "Null-Render, Blitzschnelle",
+                title2: "Multi-Kamera Audio-Synchronisation",
+                desc: "Verabschieden Sie sich von mühsamem Ausrichten. Material per Drag & Drop einfügen und sofort CapCut-Entwürfe oder DaVinci FCPXML exportieren.",
+                btnChina: "China Cloud-Download (Für Festland-China)",
+                btnGlobal: "GitHub Releases (Global)",
+                support: "Unterstützt macOS (Apple Silicon / Intel) & Windows",
+                footer1: "© 2026 MatchCut. Unter MIT-Lizenz open source.",
+                footer2: "Lokale Sandbox-Ausführung. Ihre Privatsphäre ist geschützt."
+            }
+        };
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            localStorage.setItem('matchcut_lang', lang);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('matchcut_lang') || 'zh';
+            document.getElementById('langSwitch').value = savedLang;
+            changeLanguage(savedLang);
+        });
+    </script>
 </body>
 </html>
