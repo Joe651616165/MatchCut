@@ -73,19 +73,31 @@ xattr -cr /Applications/MatchCut.app
 
 
 
-## 🍏 A must-see for macOS users during installation: Removing the “Corrupted” prompt
+> Open source zero-rendering, second-level multi-camera audio and screen synchronization artifact. Protect local privacy without uploading videos to the cloud.
 
-If you encounter the following error message when you open MatchCut for the first time on macOS:
-> **"MatchCut" is corrupted and cannot be opened. You should move it to the Trash. **
+[![GitHub release](https://img.shields.io/github/v/release/Joe651616165/MatchCut)](https://github.com/Joe651616165/MatchCut/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-⚠️ **Please rest assured that this is not a corrupted software or a virus. **
-This is the default "security isolation" mechanism adopted by the macOS system (Gatekeeper) for open source independent software that does not pay Apple the $99 annual developer certificate fee.
+---
 
-**Just 3 steps, 10 seconds to easily unlock and use permanently:**
+## 🎯 Core Functions
 
-1. 📦 **Correct installation**: Double-click the downloaded `.dmg` installation package, and be sure to drag the `MatchCut` icon into the `Applications` folder first.
-2. 💻 **Open Terminal**: Press `Command (⌘) + Space` on the keyboard to call out the focus search, enter `Terminal` (or `Terminal`) and press Enter to open it.
-3. 🛠️ **One-click unlock**: Copy and paste the following command in the terminal, and then press Enter to execute:
+MatchCut is a native desktop tool for editors and video creators:
+- **Accurate frame matching**: Based on the frame similarity algorithm (feature comparison), automatically find the time code corresponding to the reference video in the original material.
+- **Export draft with one click**: Directly export `.jyproj` cutting draft or standard FCPXML. After importing into the editing software, the timeline and clips are automatically arranged, saying goodbye to manual pulling.
+- **Local sandbox operation**: purely local CPU/GPU computing, **never upload any private materials to the cloud**.
+- **Multi-language and cross-platform**: Supports Chinese, English, Español, Deutsch, perfectly compatible with macOS (Apple Silicon / Intel) & Windows.
 
-```bash
-xattr -cr /Applications/MatchCut.app
+---
+
+## 💻 Operation and use
+
+1. Go to [GitHub Releases](https://github.com/Joe651616165/MatchCut/releases) to download the latest installation package for the corresponding system (such as `.exe` for Windows or `.dmg` for macOS).
+2. Open the software and load [Reference Film] and [Original Material].
+3. Set the similarity threshold and start matching. After the preview results are correct, export the clipping project.
+
+---
+
+## ⚠️ Disclaimer
+
+This tool is only used as an aid for technical research and efficiency improvement. Users are requested to ensure that they own legal copyrights for the video materials they handle and do not use them for infringement and piracy. Otherwise, the users will be responsible for all consequences.
