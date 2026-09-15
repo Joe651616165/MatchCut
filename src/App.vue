@@ -3,6 +3,10 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
+import { useI18n } from "vue-i18n";
+
+// 国际化 Hook
+const { locale, t } = useI18n();
 
 interface Asset {
   name: string;
@@ -51,6 +55,23 @@ const currentSoftware = ref(softwareOptions.find(opt => opt.id === targetSoftwar
 // 下拉菜单的 DOM 引用，用于判断点击区域
 const dropdownRef = ref<HTMLElement | null>(null);
 
+// 语言切换下拉状态
+const isLangDropdownOpen = ref(false);
+const langDropdownRef = ref<HTMLElement | null>(null);
+
+const languages = [
+  { code: 'zh', label: '🇨🇳 中文' },
+  { code: 'en', label: '🇬🇧 English' },
+  { code: 'es', label: '🇪🇸 Español' },
+  { code: 'de', label: '🇩🇪 Deutsch' },
+];
+
+function changeLanguage(lang: string) {
+  locale.value = lang;
+  localStorage.setItem("matchcut_app_lang", lang);
+  isLangDropdownOpen.value = false;
+}
+
 watch(targetSoftware, (newVal) => {
   localStorage.setItem("targetSoftware", newVal);
   currentSoftware.value = softwareOptions.find(opt => opt.id === newVal) || softwareOptions[0];
@@ -64,7 +85,6 @@ function selectSoftware(id: string) {
 // 切换多机位排序，并自动重新解析
 async function toggleMultiCamSort() {
   enableMultiCamSort.value = !enableMultiCamSort.value;
-  // 如果当前已经有路径了，切换排序方式后自动重新扫描一遍
   if (folderPath.value && !isProcessing.value) {
     await processFolder(folderPath.value);
   }
@@ -78,12 +98,12 @@ async function processFolder(path: string) {
   try {
     const result: MatchPair[] = await invoke("smart_sniff_folder", { 
       path,
-      multiCamSort: enableMultiCamSort.value // 将排序状态发给 Rust 后端
+      multiCamSort: enableMultiCamSort.value 
     });
     pairs.value = result.filter((p) => p.status !== "empty");
   } catch (error) {
     console.error(error);
-    alert("读取失败，请查看控制台");
+    alert(t('common.readError'));
   } finally {
     isProcessing.value = false;
   }
@@ -95,7 +115,7 @@ async function handleSelectFolder() {
     const selected = await open({
       directory: true,
       multiple: false,
-      title: "选择素材文件夹",
+      title: t('common.selectTitle'),
     });
     if (selected) {
       await processFolder(selected as string);
@@ -110,6 +130,9 @@ const handleGlobalClick = (event: MouseEvent) => {
   if (isDropdownOpen.value && dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
     isDropdownOpen.value = false;
   }
+  if (isLangDropdownOpen.value && langDropdownRef.value && !langDropdownRef.value.contains(event.target as Node)) {
+    isLangDropdownOpen.value = false;
+  }
 };
 
 let unlistenDrop: UnlistenFn | null = null;
@@ -117,7 +140,6 @@ let unlistenDragEnter: UnlistenFn | null = null;
 let unlistenDragLeave: UnlistenFn | null = null;
 
 onMounted(async () => {
-  // 挂载全局点击监听器
   document.addEventListener('mousedown', handleGlobalClick);
 
   try {
@@ -149,9 +171,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  // 卸载全局点击监听器，防止内存泄漏
   document.removeEventListener('mousedown', handleGlobalClick);
-
   if (unlistenDrop) unlistenDrop();
   if (unlistenDragEnter) unlistenDragEnter();
   if (unlistenDragLeave) unlistenDragLeave();
@@ -167,18 +187,18 @@ async function handleGenerateDraft() {
       pairs: pairs.value,
       workspace: folderPath.value,
       software: targetSoftware.value,
-      multiCamSort: enableMultiCamSort.value // 导出时也将状态发给后端
+      multiCamSort: enableMultiCamSort.value 
     });
     
     isSuccess.value = true;
     setTimeout(() => {
-      alert(`🎉 魔法生效！工程已生成\n路径: ${draftPath}`);
+      alert(`${t('common.successAlert')}\n路径: ${draftPath}`);
       isSuccess.value = false;
     }, 600);
     
   } catch (error) {
     console.error(error);
-    alert("生成失败: " + error);
+    alert(t('common.genError') + error);
   } finally {
     isProcessing.value = false;
   }
@@ -195,13 +215,10 @@ async function handleGenerateDraft() {
           <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mb-6 shadow-inner">
             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
           </div>
-          <h2 class="text-2xl font-black text-white mb-3 tracking-wide">免责声明与使用须知</h2>
-          <p class="text-sm text-slate-400 leading-relaxed mb-8">
-            MatchCut 致力于为您提供零渲染的极速多机位同步体验。为了您的数据安全，请确保在操作前已 <strong class="text-indigo-300">备份原素材</strong>。<br><br>
-            本软件仅在本地提供基于算法的工程排版服务，不对因源文件损坏、系统崩溃等导致的直接或间接损失负责。
-          </p>
+          <h2 class="text-2xl font-black text-white mb-3 tracking-wide">{{ t('disclaimer.title') }}</h2>
+          <p class="text-sm text-slate-400 leading-relaxed mb-8" v-html="t('disclaimer.content')"></p>
           <button @click="agreeDisclaimer" class="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold tracking-widest transition-all hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:-translate-y-0.5">
-            我已知晓并同意
+            {{ t('disclaimer.button') }}
           </button>
         </div>
       </div>
@@ -223,10 +240,28 @@ async function handleGenerateDraft() {
             <p class="text-[11px] text-slate-400 font-bold tracking-widest mt-0.5">ZERO-RENDER ENGINE</p>
           </div>
         </div>
-        <button @click="handleSelectFolder" :disabled="isProcessing || showDisclaimer" class="group relative px-6 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition-all duration-300 disabled:opacity-50 flex items-center gap-2 overflow-hidden shadow-lg hover:shadow-indigo-500/20">
-          <svg class="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" /></svg>
-          <span class="text-sm font-semibold text-slate-200">{{ isProcessing ? '解析中...' : '选择素材目录' }}</span>
-        </button>
+
+        <div class="flex items-center gap-3">
+          <!-- 语言切换按钮 (顶部导航右侧) -->
+          <div class="relative" ref="langDropdownRef">
+            <button @click="isLangDropdownOpen = !isLangDropdownOpen" class="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 transition-all">
+              <svg class="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+              <span>{{ languages.find(l => l.code === locale)?.label || '语言' }}</span>
+            </button>
+            <transition enter-active-class="transition duration-200 ease-out" enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+              <ul v-if="isLangDropdownOpen" class="absolute z-50 top-[calc(100%+8px)] right-0 w-36 bg-[#161921] border border-white/10 rounded-2xl p-1.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+                <li v-for="lang in languages" :key="lang.code" @click="changeLanguage(lang.code)" class="flex items-center px-3 py-2 rounded-xl cursor-pointer hover:bg-indigo-500/20 hover:text-indigo-200 text-xs transition-colors" :class="locale === lang.code ? 'bg-white/5 text-white font-bold' : 'text-slate-300'">
+                  {{ lang.label }}
+                </li>
+              </ul>
+            </transition>
+          </div>
+
+          <button @click="handleSelectFolder" :disabled="isProcessing || showDisclaimer" class="group relative px-6 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition-all duration-300 disabled:opacity-50 flex items-center gap-2 overflow-hidden shadow-lg hover:shadow-indigo-500/20">
+            <svg class="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" /></svg>
+            <span class="text-sm font-semibold text-slate-200">{{ isProcessing ? t('common.processing') : t('common.selectFolder') }}</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -236,7 +271,7 @@ async function handleGenerateDraft() {
         <div class="w-20 h-20 mb-6 rounded-3xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border transition-all duration-300 flex items-center justify-center text-indigo-400" :class="isDragging ? 'border-indigo-400 scale-110' : 'border-white/5 group-hover:scale-105'">
           <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
         </div>
-        <h3 class="text-xl font-bold text-white mb-3 tracking-wide pointer-events-none">{{ isDragging ? '松开鼠标立即解析' : (isProcessing ? '正在极速扫描...' : '点击或拖拽文件夹至此处') }}</h3>
+        <h3 class="text-xl font-bold text-white mb-3 tracking-wide pointer-events-none">{{ isDragging ? t('dropzone.dropping') : (isProcessing ? t('dropzone.scanning') : t('dropzone.idle')) }}</h3>
       </button>
 
       <!-- 列表区 -->
@@ -273,21 +308,21 @@ async function handleGenerateDraft() {
         <!-- 左侧：统计信息 -->
         <div class="pl-4 pr-2 text-sm font-medium text-slate-400 flex items-center gap-3">
           <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-          共捕获 <span class="text-white font-bold text-lg">{{ pairs.length }}</span> 组分镜
+          <span v-html="t('common.captured', { count: pairs.length })"></span>
         </div>
         
-        <!-- 右侧：三个交互组件（排序开关、下拉菜单、生成按钮） -->
+        <!-- 右侧：交互组件 -->
         <div class="flex items-center gap-3">
           
-          <!-- 新增：多机位排序切换按钮 -->
+          <!-- 多机位排序切换按钮 -->
           <button @click="toggleMultiCamSort" :disabled="isProcessing" class="group relative flex items-center gap-2.5 px-4 py-3.5 rounded-2xl border transition-all duration-300 focus:outline-none disabled:opacity-50" :class="enableMultiCamSort ? 'bg-indigo-500/10 border-indigo-500/30 hover:bg-indigo-500/20' : 'bg-white/5 border-white/10 hover:bg-white/10'">
             <div class="relative flex items-center justify-center w-5 h-5 rounded-[6px] border transition-all duration-300" :class="enableMultiCamSort ? 'bg-indigo-500 border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'border-slate-500 bg-slate-800 group-hover:border-slate-400'">
               <svg v-if="enableMultiCamSort" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
             </div>
-            <span class="text-sm font-semibold tracking-wide transition-colors" :class="enableMultiCamSort ? 'text-indigo-300' : 'text-slate-400 group-hover:text-slate-300'">多机位排序</span>
+            <span class="text-sm font-semibold tracking-wide transition-colors" :class="enableMultiCamSort ? 'text-indigo-300' : 'text-slate-400 group-hover:text-slate-300'">{{ t('common.multicamSort') }}</span>
           </button>
 
-          <!-- 下拉菜单（增加 ref="dropdownRef"） -->
+          <!-- 下拉菜单 -->
           <div class="relative" ref="dropdownRef">
             <button @click="isDropdownOpen = !isDropdownOpen" :disabled="isProcessing" class="relative z-50 flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-sm font-medium rounded-2xl pl-4 pr-10 py-3.5 transition-all shadow-inner focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-50">
               <div class="w-5 h-5 shrink-0 flex items-center justify-center">
@@ -341,7 +376,7 @@ async function handleGenerateDraft() {
             <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
             <svg class="w-5 h-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
             <span class="relative z-10 tracking-wide">
-              {{ isProcessing ? '注入中...' : (targetSoftware === 'jianying' ? '生成草稿时间轴' : '导出 XML 序列') }}
+              {{ isProcessing ? t('common.injecting') : (targetSoftware === 'jianying' ? t('common.genDraft') : t('common.genXml')) }}
             </span>
           </button>
         </div>
