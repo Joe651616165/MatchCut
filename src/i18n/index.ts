@@ -110,7 +110,7 @@ function getSystemLocale() {
     return savedLang
   }
 
-  const browserLang = (navigator.language || navigator.userLanguage || 'zh').toLowerCase()
+  const browserLang = (navigator.language || 'zh').toLowerCase()
   if (browserLang.startsWith('es')) return 'es'
   if (browserLang.startsWith('de')) return 'de'
   if (browserLang.startsWith('en')) return 'en'
